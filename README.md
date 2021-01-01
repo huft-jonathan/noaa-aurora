@@ -33,13 +33,19 @@ visible in your area, refer to the following maps:
 
 ## Usage:
 
+Print the maximum expected K-index values for tonight and tomorrow night,
+as well as the maximum value observed in the past hour:
+
 ```
 $ python3 noaa_aurora.py
 Maximum Planetary K-Index:
 Tonight: 3  Tomorrow: 2  Recently: 3.00
 ```
 
+Assuming I'm at a latitude where the K-index must be 5 or greater to view the
+aurora, is it likely to be visible tonight?:
+
 ```
-$ python3 noaa_aurora.py -f visible_tonight
+$ python3 noaa_aurora.py -k 5 -f visible_tonight
 Not visible tonight.
 ```
