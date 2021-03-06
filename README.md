@@ -1,6 +1,8 @@
 # noaa-aurora
 
-Download space weather information from NOAA related to aurora activity.
+*Will the northern (or southern) lights be shining tonight?*
+
+Downloads space weather information from NOAA related to aurora activity.
 
 
 ## Background
@@ -21,6 +23,11 @@ visible in your area, refer to the following maps:
 ![North America Aurora Visibility vs K-Index](doc/Aurora_Kp_Map_North_America.gif)
 
 ![Eurasia Aurora Visibility vs K-Index](doc/Aurora_Kp_Map_Eurasia.gif)
+
+
+## Dependencies:
+
+ - [`tzlocal`](https://pypi.org/project/tzlocal/)
 
 
 ## Scripts:

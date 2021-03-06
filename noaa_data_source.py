@@ -47,6 +47,9 @@ class NOAA_Data_Source(ABC):
     @property
     def needs_update(self):
         """File modification time determines when the next update is required."""
+        if not os.path.isfile(self._fpath):
+            return True
+
         age = time.time() - os.path.getmtime(self._fpath)
         if age > self._refresh_s:
             logging.debug("File is %i seconds old and needs to be updated." % age)
@@ -58,9 +61,13 @@ class NOAA_Data_Source(ABC):
 
         self.touch_file()   # Prevents an immediate retry if anything fails
 
+        headers = {'user-agent':
+                   'noaa-aurora, '
+                   'https://github.com/huft-jonathan/noaa-aurora'}
+
         logging.info("Making HTTP request to %s.." % self._url)
         try:
-            response = requests.get(self._url)
+            response = requests.get(self._url, headers=headers)
         except requests.exceptions.ConnectionError as e:
             logging.error(e)
             raise

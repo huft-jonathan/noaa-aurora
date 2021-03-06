@@ -76,7 +76,7 @@ class NOAA_K_Index_Forecast(NOAA_Space_Weather_Data_Source):
     <https://www.swpc.noaa.gov/products/3-day-forecast>
     """
 
-    def __init__(self, fpath="/tmp/noaa_k_index_fx.json"):
+    def __init__(self, fpath="/dev/shm/noaa_k_index_fx.json"):
         super().__init__(
             url=self.BASE_URL + "noaa-planetary-k-index-forecast.json",
             fpath=fpath)
@@ -141,7 +141,7 @@ class NOAA_K_Index_1_Minute(NOAA_Space_Weather_Data_Source):
     <https://www.swpc.noaa.gov/products/planetary-k-index>
     """
 
-    def __init__(self, fpath="/tmp/noaa_k_index_1_min.json"):
+    def __init__(self, fpath="/dev/shm/noaa_k_index_1_min.json"):
         super().__init__(
             url=self.BASE_URL + "noaa-estimated-planetary-k-index-1-minute.json",
             fpath=fpath)
@@ -173,6 +173,10 @@ class NOAA_K_Index_1_Minute(NOAA_Space_Weather_Data_Source):
         return self._get_data("_kps", utc_datetime)
 
     # Misc Methods _____________________________________________________________
+    def print_all(self):
+        self.lazy_get()
+        for t, e, k, in zip(self._times, self._estimated_kps, self._kps):
+            print(t, e, k)
 
     def demo(self):
         now = util.now()
