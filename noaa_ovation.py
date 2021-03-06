@@ -26,7 +26,7 @@ class NOAA_Ovation(noaa_k_index.NOAA_Space_Weather_Data_Source):
 
     BASE_URL = "https://services.swpc.noaa.gov/json/"
 
-    def __init__(self, fpath="ovation_aurora_latest.json"):
+    def __init__(self, fpath="/dev/shm/ovation_aurora_latest.json"):
         super().__init__(
             url=self.BASE_URL + "ovation_aurora_latest.json",
             fpath=fpath)
