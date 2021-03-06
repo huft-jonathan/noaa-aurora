@@ -1,14 +1,6 @@
 #!/usr/bin/python
 
 """
-Uses K-index data from NOAA's Space Weather Prediction Center to determine if
-the aurora are likely to be visible.
-
-To determine the minimum K-index at which the aurora can be expected to be
-visible in your area, refer to the following maps:
-
- - <https://commons.wikimedia.org/wiki/File:Aurora_Kp_Map_North_America.gif#/media/File:Aurora_Kp_Map_North_America.gif>
- - <https://commons.wikimedia.org/wiki/File:Aurora_Kp_Map_Eurasia.gif#/media/File:Aurora_Kp_Map_Eurasia.gif>
 
 """
 
@@ -21,13 +13,11 @@ import logging
 import sys
 
 import noaa_k_index
+import noaa_ovation
 import util
 
 
 class NOAA_Aurora():
-    """
-    Contains a few convenience methods to determine if aurora are likely.
-    """
 
     def __init__(self, visible_k_index=None):
         """
@@ -36,6 +26,7 @@ class NOAA_Aurora():
         """
         self.k_index_fx = noaa_k_index.NOAA_K_Index_Forecast()
         self.k_index_obs = noaa_k_index.NOAA_K_Index_1_Minute()
+        self.ovation_model = noaa_ovation.NOAA_Ovation()
 
         if visible_k_index is None:
             self.visible_k_index = 5
@@ -69,6 +60,11 @@ class NOAA_Aurora():
                 s += "%s    %i\n" % (t.strftime(util.DT_FMT), k)
         return s
 
+    def best_guess_now(self, lat=44.5, lon=-103.9):
+        return (self.highest_kp_tonight > self.visible_k_index or
+                self.highest_recent_kp > self.visible_k_index or
+                self.ovation_model.estimated(lat, lon) > 10)
+
 
 def get_arg_parser():
     parser = argparse.ArgumentParser(
@@ -78,7 +74,7 @@ def get_arg_parser():
         "-f",
         '--format',
         default="simple",
-        choices=("visible_tonight", "simple", "text_forecast"),
+        choices=("visible_tonight", "simple", "text_forecast", "best_guess"),
         help="Chose a format for the output.")
     parser.add_argument(
         "-k",
@@ -114,3 +110,6 @@ if __name__ == "__main__":
 
     elif args.format == "text_forecast":
         print(a.two_day_text_forecast)
+
+    elif args.format == "best_guess":
+        print(a.best_guess_now())
